@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中医资源平台 - 靠谱中医推荐</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        :root {
+            --primary-color: #2c7744;
+            --secondary-color: #8bc34a;
+            --accent-color: #ff9800;
+            --light-color: #f5f9f7;
+            --dark-color: #1a3c27;
+            --text-color: #333;
+            --light-text: #666;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        body {
+            background-color: #fff;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* 导航栏样式 */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .logo-icon {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* 主内容区域 */
+        main {
+            margin-top: 80px;
+        }
+        
+        section {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            margin: 0.5rem auto;
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            text-align: center;
+            padding: 6rem 5%;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: white;
+            color: var(--primary-color);
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        /* 表格样式 */
+        .doctors-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .doctors-table th, .doctors-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .doctors-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .doctors-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .doctors-table tr:hover {
+            background-color: var(--light-color);
+        }
+        
+        .province-header {
+            background-color: var(--secondary-color) !important;
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        /* 搜索和筛选 */
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-box input:focus {
+            border-color: var(--primary-color);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text);
+        }
+        
+        .filter-container {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .filter-select {
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            background-color: white;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--light-text);
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 寻求帮助部分 */
+        .help-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .help-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .help-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .help-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .help-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        /* 关于我们部分 */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .about-text h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-image {
+            background-color: var(--light-color);
+            border-radius: 10px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--secondary-color);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: #aaa;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-image {
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                flex-direction: column;
+                box-shadow: var(--shadow);
+                padding: 1rem 0;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0;
+                text-align: center;
+                padding: 0.8rem 0;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                min-width: 100%;
+            }
+            
+            .filter-container {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .filter-select {
+                flex: 1;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            section {
+                padding: 3rem 1rem;
+            }
+            
+            .hero {
+                padding: 4rem 1rem;
+            }
+            
+            .doctors-table {
+                font-size: 0.9rem;
+            }
+            
+            .doctors-table th, .doctors-table td {
+                padding: 0.7rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <span class="logo-icon">🌿</span>
+                <span>中医资源平台</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#doctors">靠谱中医名单</a></li>
+                <li><a href="#help">寻求帮助</a></li>
+                <li><a href="#about">关于我们</a></li>
+            </ul>
+            <div class="mobile-menu">☰</div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 英雄区域 -->
+        <section class="hero">
+            <h1>寻找靠谱中医，守护家人健康</h1>
+            <p>我们收集整理了全国各地经验丰富、口碑良好的中医医师信息，帮助您快速找到适合的中医资源</p>
+            <a href="#doctors" class="btn btn-primary">查看中医名单</a>
+        </section>
+
+        <!-- 靠谱中医名单 -->
+        <section id="doctors">
+            <h2 class="section-title">靠谱中医名单</h2>
+            <div class="search-container">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="搜索中医姓名、省份或专长...">
+                </div>
+                <div class="filter-container">
+                    <select class="filter-select" id="provinceFilter">
+                        <option value="">所有省份</option>
+                        <!-- 省份选项将由JavaScript动态生成 -->
+                    </select>
+                    <select class="filter-select" id="specialtyFilter">
+                        <option value="">所有专长</option>
+                        <!-- 专长选项将由JavaScript动态生成 -->
+                    </select>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>正在加载中医数据...</p>
+                </div>
+                <table class="doctors-table" id="doctorsTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>省份</th>
+                            <th>姓名</th>
+                            <th>职称</th>
+                            <th>专长领域</th>
+                            <th>所在机构</th>
+                            <th>从业年限</th>
+                        </tr>
+                    </thead>
+                    <tbody id="doctorsTableBody">
+                        <!-- 表格数据将由JavaScript动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 寻求帮助 -->
+        <section id="help">
+            <h2 class="section-title">寻求帮助</h2>
+            <div class="help-container">
+                <div class="help-card">
+                    <div class="help-icon">📋</div>
+                    <h3>中医咨询</h3>
+                    <p>如果您对中医治疗有疑问，可以提交您的问题，我们的专业团队会为您解答。</p>
+                    <a href="#" class="btn">提交咨询</a>
+                </div>
+                <div class="help-card">
+                    <div class="help-icon">👨‍⚕️</div>
+                    <h3>推荐医师</h3>
+                    <p>如果您认识优秀的中医医师，欢迎向我们推荐，我们会认真审核并添加到名单中。</p>
+                    <a href="#" class="btn">推荐医师</a>
+                </div>
+                <div class="help-card">
+                    <div class="help-icon">📞</div>
+                    <h3>联系我们</h3>
+                    <p>如果您有任何其他问题或建议，可以通过电话或邮件与我们取得联系。</p>
+                    <a href="#" class="btn">联系方式</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我们 -->
+        <section id="about">
+            <h2 class="section-title">关于我们</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>我们的使命</h3>
+                    <p>中医资源平台是一个非营利性项目，致力于收集和整理全国各地优秀中医医师的信息，为公众提供可靠的中医资源查询服务。</p>
+                    <h3>我们的愿景</h3>
+                    <p>我们希望建立一个透明、可信的中医信息平台，帮助更多人找到合适的中医医师，促进中医药文化的传承与发展。</p>
+                    <h3>我们的团队</h3>
+                    <p>我们的团队由中医药爱好者、医疗行业从业者和信息技术专家组成，共同致力于推动中医药资源的数字化和普及化。</p>
+                    <a href="#" class="btn btn-primary">了解更多</a>
+                </div>
+                <div class="about-image">
+                    <div>中医文化传承</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>中医资源平台</h3>
+                <p>致力于提供可靠的中医医师信息，帮助您找到合适的医疗资源。</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <ul class="footer-links">
+                    <li><a href="#doctors">靠谱中医名单</a></li>
+                    <li><a href="#help">寻求帮助</a></li>
+                    <li><a href="#about">关于我们</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <ul class="footer-links">
+                    <li>邮箱：contact@tcm-resource.org</li>
+                    <li>电话：400-123-4567</li>
+                    <li>地址：北京市朝阳区中医药大厦</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 中医资源平台 版权所有
+        </div>
+    </footer>
+
+    <!-- CSV数据文件 -->
+    <script id="doctors-csv" type="text/csv">
+省份,姓名,职称,专长领域,所在机构,从业年限
+北京市,张明远,主任医师,内科、妇科,北京中医药大学东直门医院,28年
+北京市,李淑华,副主任医师,针灸、推拿,中国中医科学院广安门医院,22年
+上海市,王建国,主任医师,内科、儿科,上海中医药大学附属龙华医院,30年
+上海市,陈晓梅,副主任医师,妇科、针灸,上海市中医医院,18年
+广东省,刘志强,主任医师,内科、骨科,广东省中医院,25年
+广东省,黄美玲,副主任医师,妇科、儿科,广州中医药大学第一附属医院,20年
+江苏省,周文华,主任医师,内科、针灸,江苏省中医院,32年
+江苏省,徐小芳,副主任医师,妇科、推拿,南京市中医院,16年
+浙江省,赵志明,主任医师,内科、儿科,浙江省中医院,27年
+浙江省,孙丽华,副主任医师,针灸、妇科,杭州市中医院,19年
+四川省,杨建国,主任医师,内科、骨科,成都中医药大学附属医院,29年
+四川省,何小娟,副主任医师,妇科、儿科,四川省中医院,17年
+山东省,刘志明,主任医师,内科、针灸,山东省中医院,26年
+山东省,王丽华,副主任医师,妇科、推拿,济南市中医医院,15年
+河南省,张建国,主任医师,内科、儿科,河南省中医院,31年
+河南省,赵小芳,副主任医师,针灸、妇科,郑州市中医院,21年
+    </script>
+
+    <script>
+        // 移动端菜单切换
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+        
+        // 平滑滚动到锚点
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 关闭移动端菜单
+                    document.querySelector('.nav-links').classList.remove('active');
+                }
+            });
+        });
+        
+        // 解析CSV数据
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',');
+            const data = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                const entry = {};
+                
+                for (let j = 0; j < headers.length; j++) {
+                    entry[headers[j]] = values[j];
+                }
+                
+                data.push(entry);
+            }
+            
+            return data;
+        }
+        
+        // 渲染表格
+        function renderTable(data) {
+            const tableBody = document.getElementById('doctorsTableBody');
+            const provinceFilter = document.getElementById('provinceFilter');
+            const specialtyFilter = document.getElementById('specialtyFilter');
+            
+            // 清空表格
+            tableBody.innerHTML = '';
+            
+            // 获取所有省份和专长
+            const provinces = [...new Set(data.map(item => item.省份))].sort();
+            const specialties = [...new Set(data.flatMap(item => item.专长领域.split('、')))].sort();
+            
+            // 填充省份筛选器
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province;
+                option.textContent = province;
+                provinceFilter.appendChild(option);
+            });
+            
+            // 填充专长筛选器
+            specialties.forEach(specialty => {
+                const option = document.createElement('option');
+                option.value = specialty;
+                option.textContent = specialty;
+                specialtyFilter.appendChild(option);
+            });
+            
+            // 按省份分组数据
+            const groupedData = {};
+            data.forEach(item => {
+                if (!groupedData[item.省份]) {
+                    groupedData[item.省份] = [];
+                }
+                groupedData[item.省份].push(item);
+            });
+            
+            // 按省份排序
+            const sortedProvinces = Object.keys(groupedData).sort();
+            
+            // 渲染表格
+            sortedProvinces.forEach(province => {
+                // 添加省份标题行
+                const provinceRow = document.createElement('tr');
+                provinceRow.className = 'province-header';
+                const provinceCell = document.createElement('td');
+                provinceCell.colSpan = 6;
+                provinceCell.textContent = province;
+                provinceRow.appendChild(provinceCell);
+                tableBody.appendChild(provinceRow);
+                
+                // 添加该省份的医生数据
+                groupedData[province].forEach(doctor => {
+                    const row = document.createElement('tr');
+                    
+                    // 省份
+                    const provinceCell = document.createElement('td');
+                    provinceCell.textContent = doctor.省份;
+                    row.appendChild(provinceCell);
+                    
+                    // 姓名
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = doctor.姓名;
+                    row.appendChild(nameCell);
+                    
+                    // 职称
+                    const titleCell = document.createElement('td');
+                    titleCell.textContent = doctor.职称;
+                    row.appendChild(titleCell);
+                    
+                    // 专长领域
+                    const specialtyCell = document.createElement('td');
+                    specialtyCell.textContent = doctor.专长领域;
+                    row.appendChild(specialtyCell);
+                    
+                    // 所在机构
+                    const institutionCell = document.createElement('td');
+                    institutionCell.textContent = doctor.所在机构;
+                    row.appendChild(institutionCell);
+                    
+                    // 从业年限
+                    const experienceCell = document.createElement('td');
+                    experienceCell.textContent = doctor.从业年限;
+                    row.appendChild(experienceCell);
+                    
+                    tableBody.appendChild(row);
+                });
+            });
+            
+            // 隐藏加载指示器，显示表格
+            document.getElementById('loadingIndicator').style.display = 'none';
+            document.getElementById('doctorsTable').style.display = 'table';
+            
+            // 绑定搜索和筛选事件
+            bindFilterEvents(data);
+        }
+        
+        // 绑定搜索和筛选事件
+        function bindFilterEvents(data) {
+            document.getElementById('searchInput').addEventListener('input', () => filterTable(data));
+            document.getElementById('provinceFilter').addEventListener('change', () => filterTable(data));
+            document.getElementById('specialtyFilter').addEventListener('change', () => filterTable(data));
+        }
+        
+        // 表格搜索和筛选功能
+        function filterTable(data) {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const provinceFilter = document.getElementById('provinceFilter').value;
+            const specialtyFilter = document.getElementById('specialtyFilter').value;
+            
+            const rows = document.querySelectorAll('.doctors-table tbody tr');
+            
+            rows.forEach(row => {
+                if (row.classList.contains('province-header')) {
+                    // 处理省份标题行
+                    let provinceVisible = false;
+                    let nextRow = row.nextElementSibling;
+                    
+                    while (nextRow && !nextRow.classList.contains('province-header')) {
+                        if (isRowVisible(nextRow, searchText, provinceFilter, specialtyFilter)) {
+                            provinceVisible = true;
+                            break;
+                        }
+                        nextRow = nextRow.nextElementSibling;
+                    }
+                    
+                    row.style.display = provinceVisible ? '' : 'none';
+                } else {
+                    // 处理数据行
+                    row.style.display = isRowVisible(row, searchText, provinceFilter, specialtyFilter) ? '' : 'none';
+                }
+            });
+        }
+        
+        function isRowVisible(row, searchText, provinceFilter, specialtyFilter) {
+            const cells = row.cells;
+            const province = cells[0].textContent;
+            const name = cells[1].textContent.toLowerCase();
+            const specialty = cells[3].textContent;
+            
+            // 检查省份筛选
+            if (provinceFilter && province !== provinceFilter) {
+                return false;
+            }
+            
+            // 检查专长筛选
+            if (specialtyFilter && !specialty.includes(specialtyFilter)) {
+                return false;
+            }
+            
+            // 检查搜索文本
+            if (searchText) {
+                const rowText = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+                if (!rowText.includes(searchText)) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从CSV元素获取数据
+            const csvText = document.getElementById('doctors-csv').textContent;
+            const data = parseCSV(csvText);
+            renderTable(data);
+            
+            // 如果您想从外部CSV文件加载数据，可以使用以下代码：
+            /*
+            fetch('doctors.csv')
+                .then(response => response.text())
+                .then(csvText => {
+                    const data = parseCSV(csvText);
+                    renderTable(data);
+                })
+                .catch(error => {
+                    console.error('加载CSV数据失败:', error);
+                    document.getElementById('loadingIndicator').innerHTML = '<p>数据加载失败，请刷新页面重试。</p>';
+                });
+            */
+        });
+    </script>
+</body>
+</html>
