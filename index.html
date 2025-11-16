@@ -3,7 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>中医资源平台 - 靠谱中医推荐</title>
+    <title>靠谱中医</title>
+    
+    <!-- 百度统计 -->
+    <script>   
+	var _hmt = _hmt || [];
+	(function() {
+  		var hm = document.createElement("script");
+  		hm.src = "https://hm.baidu.com/hm.js?f7fa0c9da1e573c74ca63d1dd9b83256";
+  		var s = document.getElementsByTagName("script")[0]; 
+  		s.parentNode.insertBefore(hm, s);	
+	})();
+    </script>
+    
+    
     <style>
         /* 基础样式重置 */
         * {
@@ -268,6 +281,16 @@
             to { transform: rotate(360deg); }
         }
         
+         /* 数据来源说明 */
+        .data-source {
+            background-color: var(--light-color);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
         /* 寻求帮助部分 */
         .help-container {
             display: grid;
@@ -470,6 +493,9 @@
         }
     </style>
 </head>
+
+
+
 <body>
     <!-- 导航栏 -->
     <header>
@@ -480,18 +506,19 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#doctors">靠谱中医名单</a></li>
-                <li><a href="#help">寻求帮助</a></li>
                 <li><a href="#about">关于我们</a></li>
             </ul>
             <div class="mobile-menu">☰</div>
         </nav>
     </header>
 
+
+
     <main>
         <!-- 英雄区域 -->
         <section class="hero">
             <h1>寻找靠谱中医，守护家人健康</h1>
-            <p>我们收集整理了全国各地经验丰富、口碑良好的中医医师信息，帮助您快速找到适合的中医资源</p>
+            <p>我们收集整理了全国各地经验丰富、口碑良好、善用经方的中医医师信息，帮助您快速找到适合的中医资源</p>
             <a href="#doctors" class="btn btn-primary">查看中医名单</a>
         </section>
 
@@ -536,40 +563,12 @@
                     </tbody>
                 </table>
             </div>
-        </section>
-
-        <!-- 寻求帮助 -->
-        <section id="help">
-            <h2 class="section-title">寻求帮助</h2>
-            <div class="help-container">
-                <div class="about-image">
-                    <div>公益项目</div>
-                </div>
-                <div class="help-card">
-                    <div class="help-icon">📋</div>
-                    <h3>中医咨询</h3>
-                    <p>如果上述资源未能解决您的问题，需要找其他大夫资源，可以发邮件，我们的专业团队会为您解答。</p>
-                    <a href=mailto:web@tcm100.cn class="btn">发送邮件给我们</a>
-                </div>
-                <div class="about-image">
-                    <div>免费服务</div>
-                </div>
-                <!-- 
-                <div class="help-card">
-                    <div class="help-icon">👨‍⚕️</div>
-                    <h3>推荐医师</h3>
-                    <p>如果您认识优秀的中医医师，欢迎向我们推荐，我们会认真审核并添加到名单中。</p>
-                    <a href="#" class="btn">推荐医师</a>
-                </div>
-                <div class="help-card">
-                    <div class="help-icon">📞</div>
-                    <h3>联系我们</h3>
-                    <p>如果您有任何其他问题或建议，可以通过电话或邮件与我们取得联系。</p>
-                    <a href="#" class="btn">联系方式</a>
-                </div>
-                -->
+            
+            <div class="data-source">
+                <p><strong>数据来源说明：</strong>所有中医信息均来源于公开的学术会议信息、医疗机构官网、卫健委注册信息、学术期刊及用户实名推荐，经过平台志愿者团队审核确认。如果您发现信息有误或者已经变更，请通过"寻求帮助"联系我们。</p>
             </div>
         </section>
+
 
         <!-- 关于我们 -->
         <section id="about">
@@ -581,11 +580,11 @@
                     <h3>我们的愿景</h3>
                     <p>我们希望建立一个透明、可信的中医信息平台，帮助更多人找到合适的中医医师，促进中医药文化的传承与发展。</p>
                     <h3>我们的团队</h3>
-                    <p>本公益项目由德派软件负责运营，秘书处设在德派软件,我们的志愿者团队由中医药爱好者、医疗行业从业者和信息技术专家组成。</p>
+                    <p>本项目由德派软件支持运营，我们的志愿者团队由中医药爱好者、医疗行业从业者和信息技术专家组成。</p>
                     <!-- <a href="#" class="btn btn-primary">了解更多</a> -->
                 </div>
                 <div class="about-image">
-                    <div>中医文化传承</div>
+                    <div>中医经典传承</div>
                 </div>
             </div>
         </section>
@@ -602,7 +601,6 @@
                 <h3>快速链接</h3>
                 <ul class="footer-links">
                     <li><a href="#doctors">靠谱中医名单</a></li>
-                    <li><a href="#help">寻求帮助</a></li>
                     <li><a href="#about">关于我们</a></li>
                 </ul>
             </div>
@@ -620,12 +618,19 @@
         </div>
     </footer>
 
+
+
+
+
+
+
+
+
     <!-- CSV数据文件 -->
     <script id="doctors-csv" type="text/csv">
 省份,姓名,职称,专长领域,所在机构,从业年限
 北京市,王庆国,主任医师,脾胃病科,北京中医药大学东直门医院,30余年
 北京市,冯世伦,主任医师,男科,中日友好医院,50余年
-天津市,张伯礼,主任医师,心血管科,天津中国医药大学第一附属医院,近40年
 天津市,吴雄志,主任医师,名中医馆,天津市中西医结合医院,近30年
 河北省,吕志杰,主任医师,内科,河北中医学院国医堂,40余年
 山西省,赵杰,主任医师,经典扶阳病科,山西省中西医结合医院,30余年
@@ -634,7 +639,7 @@
 河南省,王付,主任医师,内科,河南经方医药中心,1958年生
 河南省,毛进军,主任医师,内二科,驻马店市第四人民医院,
 新疆,陈雁黎,主任医师,名医堂,新疆昌吉州中医院,50余年
-江苏省,黄煌,主任医师,名医堂,江苏省中医院名医堂,1954年生
+江苏省,黄煌,主任医师,名医堂,江苏省中医院,1954年生
 山东省,李心机,主任医师,内科,山东新中鲁中医医院,近50年
 山东省,李贵明,主任医师,肾内科,肥城矿业中心医院,1985年大学毕业
 广东省,欧阳卫权,主任医师,全科,固生堂欧阳卫权经方研究中心,20余年
